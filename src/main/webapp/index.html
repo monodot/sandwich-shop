@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <link rel="stylesheet" href="css/styles.css"/>
+    <!-- For a little light interactivity -->
+    <script src="js/htmx.min.js"></script>
+    <title>The Sandwich Shoppe</title>
+</head>
+
+<body>
+    <h1>Welcome to The Sandwich Shoppe!</h1>
+
+    <h2>Place an order</h2>
+<!--    <form method="POST" action="orders/new">-->
+    <form hx-post="orders/new" hx-target="#order-result">
+        <select name="sandwich">
+            <option value="egg_salad">Egg Salad</option>
+            <option value="egg_mayo">Egg Mayonnaise</option>
+            <option value="egg_ham">Egg and Ham</option>
+        </select>
+        <input type="submit" value="Place Order"/>
+    </form>
+    <p id="order-result">...</p>
+
+    <h2>Order history</h2>
+
+    <div hx-trigger="every 1s" hx-swap="innerHTML" hx-get="orders/list">
+        <table>
+            <thead>
+                <tr>
+                    <td>Order ID</td>
+                    <td>Sandwich type</td>
+                    <td>Status</td>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</body>
+
+</html>
