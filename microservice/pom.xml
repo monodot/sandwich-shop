@@ -74,114 +74,6 @@
             <scope>provided</scope>
         </dependency>
 
-
-        <!--        &lt;!&ndash; Needed for running tests (you may also use TestNG) &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>junit</groupId>-->
-<!--            <artifactId>junit</artifactId>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash; Now we declare any tools needed &ndash;&gt;-->
-
-<!--        &lt;!&ndash; Annotation processor to generate the JPA metamodel classes for-->
-<!--            typesafe criteria queries &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.hibernate</groupId>-->
-<!--            <artifactId>hibernate-jpamodelgen</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; Jakarta Activation needed for JPA model generation &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>com.sun.activation</groupId>-->
-<!--            <artifactId>jakarta.activation</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash; Bean Validation Implementation-->
-<!--             Provides portable constraints such as @Email-->
-<!--             Hibernate Validator is shipped in JBoss EAP &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.hibernate.validator</groupId>-->
-<!--            <artifactId>hibernate-validator</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-<!--        &lt;!&ndash; hibernate-validator dependencies excluded on server dependency management yet required &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>jakarta.validation</groupId>-->
-<!--            <artifactId>jakarta.validation-api</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash; Annotation processor that raising compilation errors whenever constraint-->
-<!--            annotations are incorrectly used. &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.hibernate.validator</groupId>-->
-<!--            <artifactId>hibernate-validator-annotation-processor</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash; Import the JPA API, we use provided scope as the API is included in-->
-<!--            JBoss EAP &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>jakarta.persistence</groupId>-->
-<!--            <artifactId>jakarta.persistence-api</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash; Optional, but highly recommended &ndash;&gt;-->
-<!--        &lt;!&ndash; Arquillian allows you to test enterprise code such as EJBs and Transactional(JTA)-->
-<!--            JPA from JUnit/TestNG &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.jboss.arquillian.junit</groupId>-->
-<!--            <artifactId>arquillian-junit-container</artifactId>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.jboss.arquillian.protocol</groupId>-->
-<!--            <artifactId>arquillian-protocol-servlet</artifactId>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash; Import the Common Annotations API (JSR-250), we use provided scope-->
-<!--            as the API is included in JBoss EAP &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.jboss.spec.javax.annotation</groupId>-->
-<!--            <artifactId>jboss-annotations-api_1.3_spec</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash; Import the EJB API, we use provided scope as the API is included in-->
-<!--            JBoss EAP &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.jboss.spec.javax.ejb</groupId>-->
-<!--            <artifactId>jboss-ejb-api_3.2_spec</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash; Import the JSF API, we use provided scope as the API is included in-->
-<!--            JBoss EAP &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.jboss.spec.javax.faces</groupId>-->
-<!--            <artifactId>jboss-jsf-api_2.3_spec</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash; Import the JAX-RS API, we use provided scope as the API is included-->
-<!--            in JBoss EAP &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.jboss.spec.javax.ws.rs</groupId>-->
-<!--            <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.jboss.spec.javax.xml.bind</groupId>-->
-<!--            <artifactId>jboss-jaxb-api_2.3_spec</artifactId>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-
     </dependencies>
 
     <build>
@@ -205,7 +97,7 @@
             <!-- When built in OpenShift the 'openshift' profile will be
                 used when invoking mvn. -->
             <!-- Use this profile for any OpenShift specific customization
-                your app will ne    ed. -->
+                your app will need. -->
             <!-- By default that is to put the resulting archive into the
                 'deployments' folder. -->
             <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
