@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example</groupId>
+    <artifactId>kitchen-service</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>Sandwich Shop :: Kitchen Service</name>
+    <description>A demo microservice which has been carved from a big monolith</description>
+
+    <properties>
+        <version.server.bom>7.4.0.GA</version.server.bom>
+        <version.wildfly.maven.plugin>2.0.2.Final</version.wildfly.maven.plugin>
+
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- importing the jakartaee8-with-tools BOM adds specs and other useful artifacts as managed dependencies -->
+            <dependency>
+                <groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-eap-jakartaee8</artifactId>
+                <version>${version.server.bom}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+
+        <!-- First declare the APIs we depend on and need for compilation. All
+            of them are provided by JBoss EAP -->
+
+        <!-- Import the CDI API, we use provided scope as the API is included in
+            JBoss EAP -->
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Import the Common Annotations API (JSR-250), we use provided
+    scope as the API is included in JBoss EAP -->
+        <dependency>
+            <groupId>org.jboss.spec.javax.annotation</groupId>
+            <artifactId>jboss-annotations-api_1.3_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Add the JMS API so that we can send/receive messages to the queues inside Wildfly -->
+        <dependency>
+            <groupId>org.jboss.spec.javax.jms</groupId>
+            <artifactId>jboss-jms-api_2.0_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- So that we can use EJBs (e.g. @MessageDriven) -->
+        <dependency>
+            <groupId>org.jboss.spec.javax.ejb</groupId>
+            <artifactId>jboss-ejb-api_3.2_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- So we can marshal/unmarshal JSON -->
+        <dependency>
+            <groupId>jakarta.json</groupId>
+            <artifactId>jakarta.json-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <!--        &lt;!&ndash; Needed for running tests (you may also use TestNG) &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>junit</groupId>-->
+<!--            <artifactId>junit</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Now we declare any tools needed &ndash;&gt;-->
+
+<!--        &lt;!&ndash; Annotation processor to generate the JPA metamodel classes for-->
+<!--            typesafe criteria queries &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.hibernate</groupId>-->
+<!--            <artifactId>hibernate-jpamodelgen</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; Jakarta Activation needed for JPA model generation &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.sun.activation</groupId>-->
+<!--            <artifactId>jakarta.activation</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Bean Validation Implementation-->
+<!--             Provides portable constraints such as @Email-->
+<!--             Hibernate Validator is shipped in JBoss EAP &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.hibernate.validator</groupId>-->
+<!--            <artifactId>hibernate-validator</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; hibernate-validator dependencies excluded on server dependency management yet required &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>jakarta.validation</groupId>-->
+<!--            <artifactId>jakarta.validation-api</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Annotation processor that raising compilation errors whenever constraint-->
+<!--            annotations are incorrectly used. &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.hibernate.validator</groupId>-->
+<!--            <artifactId>hibernate-validator-annotation-processor</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Import the JPA API, we use provided scope as the API is included in-->
+<!--            JBoss EAP &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>jakarta.persistence</groupId>-->
+<!--            <artifactId>jakarta.persistence-api</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Optional, but highly recommended &ndash;&gt;-->
+<!--        &lt;!&ndash; Arquillian allows you to test enterprise code such as EJBs and Transactional(JTA)-->
+<!--            JPA from JUnit/TestNG &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.jboss.arquillian.junit</groupId>-->
+<!--            <artifactId>arquillian-junit-container</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.jboss.arquillian.protocol</groupId>-->
+<!--            <artifactId>arquillian-protocol-servlet</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Import the Common Annotations API (JSR-250), we use provided scope-->
+<!--            as the API is included in JBoss EAP &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.jboss.spec.javax.annotation</groupId>-->
+<!--            <artifactId>jboss-annotations-api_1.3_spec</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Import the EJB API, we use provided scope as the API is included in-->
+<!--            JBoss EAP &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.jboss.spec.javax.ejb</groupId>-->
+<!--            <artifactId>jboss-ejb-api_3.2_spec</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Import the JSF API, we use provided scope as the API is included in-->
+<!--            JBoss EAP &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.jboss.spec.javax.faces</groupId>-->
+<!--            <artifactId>jboss-jsf-api_2.3_spec</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; Import the JAX-RS API, we use provided scope as the API is included-->
+<!--            in JBoss EAP &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.jboss.spec.javax.ws.rs</groupId>-->
+<!--            <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.jboss.spec.javax.xml.bind</groupId>-->
+<!--            <artifactId>jboss-jaxb-api_2.3_spec</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+
+    </dependencies>
+
+    <build>
+        <!-- Set the name of the WAR, used as the context root when the app is deployed -->
+        <finalName>${project.artifactId}</finalName>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.wildfly.plugins</groupId>
+                    <artifactId>wildfly-maven-plugin</artifactId>
+                    <version>${version.wildfly.maven.plugin}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

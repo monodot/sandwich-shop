@@ -1,0 +1,222 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      description: The web server's http port.
+    labels:
+      application: eap-app
+    name: eap-app
+  spec:
+    ports:
+    - port: 8080
+      targetPort: 8080
+    selector:
+      deploymentConfig: eap-app
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      description: The JGroups ping port for clustering.
+    labels:
+      application: eap-app
+    name: eap-app-ping
+  spec:
+    ports:
+    - name: ping
+      port: 8888
+      targetPort: 8888
+    selector:
+      deploymentConfig: eap-app
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      application: eap-app
+    name: eap-app
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: eap-app:latest
+    source:
+      dockerfile: |-
+        FROM jboss-eap74-openjdk8-runtime-openshift:7.4.0
+        COPY /server $JBOSS_HOME
+        USER root
+        RUN chown -R jboss:root $JBOSS_HOME && chmod -R ug+rwX $JBOSS_HOME
+        USER jboss
+        CMD $JBOSS_HOME/bin/openshift-launch.sh
+      images:
+      - from:
+          kind: ImageStreamTag
+          name: eap-app-build-artifacts:latest
+        paths:
+        - destinationDir: .
+          sourcePath: /s2i-output/server/
+      type: Dockerfile
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: jboss-eap74-openjdk8-runtime-openshift:7.4.0
+        imageOptimizationPolicy: SkipLayers
+      type: Docker
+    triggers:
+    - type: ImageChange
+      imageChange:
+        from:
+          kind: ImageStreamTag
+          name: eap-app-build-artifacts:latest
+    - type: ConfigChange
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      application: eap-app
+    name: eap-app-build-artifacts
+  spec:
+    source:
+      type: Git
+      git:
+        ref: main
+        uri: https://github.com/monodot/sandwich-shop.git
+      contextDir: microservice
+    strategy:
+      type: Source
+      sourceStrategy:
+        env:
+        - name: MAVEN_MIRROR_URL
+        - name: MAVEN_ARGS_APPEND
+          value: -Dcom.redhat.xpaas.repo.jbossorg
+        - name: GALLEON_PROVISION_LAYERS
+        - name: GALLEON_PROVISION_DEFAULT_FAT_SERVER
+          value: "true"
+        - name: ARTIFACT_DIR
+        forcePull: true
+        incremental: true
+        from:
+          kind: ImageStreamTag
+          name: jboss-eap74-openjdk8-openshift:7.4.0
+    output:
+      to:
+        kind: ImageStreamTag
+        name: eap-app-build-artifacts:latest
+    triggers:
+    - type: ImageChange
+      imageChange: {}
+    - type: ConfigChange
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      application: eap-app
+    name: eap-app
+  spec:
+    replicas: 1
+    selector:
+      deploymentConfig: eap-app
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          deploymentConfig: eap-app
+          application: eap-app
+        name: eap-app
+      spec:
+        containers:
+        - env:
+          - name: JGROUPS_PING_PROTOCOL
+            value: dns.DNS_PING
+          - name: OPENSHIFT_DNS_PING_SERVICE_NAME
+            value: eap-app-ping
+          - name: OPENSHIFT_DNS_PING_SERVICE_PORT
+            value: "8888"
+          - name: MQ_CLUSTER_PASSWORD
+            value: d1HFrgdE
+          - name: MQ_QUEUES
+          - name: MQ_TOPICS
+          - name: JGROUPS_CLUSTER_PASSWORD
+            value: wTSfs4Qi
+          - name: AUTO_DEPLOY_EXPLODED
+            value: "false"
+          - name: ENABLE_GENERATE_DEFAULT_DATASOURCE
+            value: "false"
+          - name: MQ_SERVICE_PREFIX_MAPPING
+            value: henlo-amq7=MYBROKER
+          - name: HENLO_AMQ_TCP_SERVICE_HOST
+            value: 6.tcp.ngrok.io-TODO
+          - name: HENLO_AMQ_TCP_SERVICE_PORT
+            value: "10449"
+          - name: MYBROKER_USERNAME
+            value: admin-TODO
+          - name: MYBROKER_PASSWORD
+            value: admin-TODO
+          - name: MYBROKER_PROTOCOL
+            value: tcp
+          image: eap-app
+          imagePullPolicy: Always
+          livenessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - /opt/eap/bin/livenessProbe.sh
+            initialDelaySeconds: 60
+          name: eap-app
+          ports:
+          - containerPort: 8778
+            name: jolokia
+            protocol: TCP
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          - containerPort: 8888
+            name: ping
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - /opt/eap/bin/readinessProbe.sh
+            initialDelaySeconds: 10
+          resources:
+            limits:
+              memory: 1Gi
+    triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - eap-app
+        from:
+          kind: ImageStreamTag
+          name: eap-app:latest
+    - type: ConfigChange
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    labels:
+      application: eap-app
+    name: eap-app
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    labels:
+      application: eap-app
+    name: eap-app-build-artifacts
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      description: Route for application's https service.
+    labels:
+      application: eap-app
+    name: eap-app
+  spec:
+    to:
+      name: eap-app
