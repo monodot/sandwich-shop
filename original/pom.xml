@@ -56,6 +56,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- So we can marshal/unmarshal JSON -->
+        <dependency>
+            <groupId>javax.json</groupId>
+            <artifactId>javax.json-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Add the JMS API so that we can send/receive messages to the queues inside Wildfly -->
         <dependency>
             <groupId>org.jboss.spec.javax.jms</groupId>

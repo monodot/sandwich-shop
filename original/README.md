@@ -4,11 +4,12 @@ A demo Java EE application, for ordering delicious sandwiches. Designed to run o
 
 - Displays a sandwich order form and shows all the recent orders and their status.
 - A bean _processes_ each order, enriching it with some information
-- JAX-RS provides the endpoints to the application (create a new order; view orders list)
+- JAX-RS provides the endpoints to the application (create a new order; view orders list) - see `OrdersWebService`
+- 
 
 ## To deploy
 
-Download and extract the Wildfly distribution. Then go into the installation directory and run Wildfly with the "full" profile (enables messaging and other features):
+Download and extract the Wildfly (or JBoss EAP) distribution. Then go into the installation directory and run Wildfly with the "full" profile (enables messaging and other features):
 
 ```
 cd $WILDFLY_HOME/bin
